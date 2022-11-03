@@ -30,7 +30,8 @@ async function main() {
     deeparWasmPath,
     segmentationConfig: {
       modelPath: segmentationModelPath,
-    }
+    },
+    onInitialize: deepARInitialized,
   });
   
   //register extension
@@ -52,31 +53,30 @@ async function main() {
   videoContainer.style.height = height + "px";
   
   await videoTrack.play(videoContainer, { mirror: false, fit: 'contain' });
+}
 
+function deepARInitialized(deepAR) {
   // hide loader
   const loaderWrapper = document.getElementById('loader-wrapper');
   loaderWrapper.style.display = 'none';
-  
-  let deepAR = processor.deepAR;
-  
+
   deepAR.downloadFaceTrackingModel(faceTrackingModelPath);
 
   deepAR.switchEffect(0, 'slot', effectList[0]);
-  
+
   deepAR.callbacks.onFaceVisibilityChanged = (visible) => {
     console.log('face visible ' + visible);
   };
 
   const carousel = document.getElementById('carousel');
-  
+
   // Position the carousel to cover the canvas
   if (window.innerWidth > window.innerHeight) {
     const width = Math.floor(window.innerHeight * 0.66);
     carousel.style.width = width + 'px';
     carousel.style.marginLeft = (window.innerWidth - width) / 2 + "px";
   }
-  
-  
+
   $(document).ready(function () {
     $('.effect-carousel').slick({
       slidesToShow: 1,
@@ -86,7 +86,7 @@ async function main() {
       accessibility: false,
       variableWidth: true,
     });
-  
+
     $('.effect-carousel').on('afterChange', function (event, slick, currentSlide) {
       deepAR.switchEffect(0, 'slot', effectList[currentSlide]);
     });

@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "agora-rtc-sdk-ng": "^4.12.2",
-    "deepar-agora-extension": "^1.0.0"
+    "deepar-agora-extension": "^1.0.1"
   }
 }
