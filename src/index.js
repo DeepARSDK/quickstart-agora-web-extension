@@ -1,36 +1,29 @@
 import { VideoExtension } from 'deepar-agora-extension';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 
-import deeparWasmPath from 'deepar/wasm/deepar.wasm';
-import faceTrackingModelPath from 'deepar/models/face/models-68-extreme.bin';
-import segmentationModelPath from 'deepar/models/segmentation/segmentation-160x160-opt.bin';
-import * as effects from './effects';
-
 const effectList = [
-  effects.viking,
-  effects.makeup,
-  effects.makeup_split,
-  effects.stallone,
-  effects.flower_face,
-  effects.galaxy_bacground,
-  effects.humaniod,
-  effects.devil_horns,
-  effects.ping_pong,
-  effects.hearts,
-  effects.snail,
-  effects.hope,
-  effects.vendetta,
-  effects.fire,
-  effects.elephant_trunk
+  'effects/viking_helmet.deepar',
+  'effects/MakeupLook.deepar',
+  'effects/Split_View_Look.deepar',
+  'effects/Stallone.deepar',
+  'effects/flower_face.deepar',
+  'effects/galaxy_background_web.deepar',
+  'effects/Humanoid.deepar',
+  'effects/Neon_Devil_Horns.deepar',
+  'effects/Ping_Pong.deepar',
+  'effects/Pixel_Hearts.deepar',
+  'effects/Snail.deepar',
+  'effects/Hope.deepar',
+  'effects/Vendetta_Mask.deepar',
+  'effects/Fire_Effect.deepar',
+  'effects/Elephant_Trunk.deepar'
 ];
 
 async function main() {
   const videoExtension = new VideoExtension({
     licenseKey: 'your_license_key_goes_here',
-    deeparWasmPath,
-    segmentationConfig: {
-      modelPath: segmentationModelPath,
-    },
+    effect: effectList[0],
+    rootPath: 'deepar-resources',
     onInitialize: deepARInitialized,
   });
   
@@ -60,14 +53,6 @@ function deepARInitialized(deepAR) {
   const loaderWrapper = document.getElementById('loader-wrapper');
   loaderWrapper.style.display = 'none';
 
-  deepAR.downloadFaceTrackingModel(faceTrackingModelPath);
-
-  deepAR.switchEffect(0, 'slot', effectList[0]);
-
-  deepAR.callbacks.onFaceVisibilityChanged = (visible) => {
-    console.log('face visible ' + visible);
-  };
-
   const carousel = document.getElementById('carousel');
 
   // Position the carousel to cover the canvas
@@ -87,8 +72,8 @@ function deepARInitialized(deepAR) {
       variableWidth: true,
     });
 
-    $('.effect-carousel').on('afterChange', function (event, slick, currentSlide) {
-      deepAR.switchEffect(0, 'slot', effectList[currentSlide]);
+    $('.effect-carousel').on('afterChange', async function (event, slick, currentSlide) {
+      await deepAR.switchEffect(effectList[currentSlide]);
     });
   });
 }

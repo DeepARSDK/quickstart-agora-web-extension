@@ -4,7 +4,7 @@
   "description": "Quickstart project that shows how to use DeepAR Web SDK as an imported module.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js --mode production && cp -r public/* dist",
+    "build": "webpack --config webpack.config.js --mode production && cp -r public/* dist && cp -r node_modules/deepar dist/deepar-resources",
     "dev": "webpack serve --mode development --open --port 8888"
   },
   "author": "",
@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "agora-rtc-sdk-ng": "^4.12.2",
-    "deepar-agora-extension": "^1.0.1"
+    "deepar-agora-extension": "^2.0.0"
   }
 }
